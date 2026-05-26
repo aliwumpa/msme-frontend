@@ -1,0 +1,134 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  border-bottom: 1px solid #dddddd;
+  background: #ffffff;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+  }
+
+  &__logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__nav-link {
+    position: relative;
+    font-size: 14px;
+    color: #64748b;
+    text-decoration: none;
+    transition: 0.2s ease;
+
+    &:hover {
+      color: #0f172a;
+    }
+
+    &.active {
+      color: #0f172a;
+      font-weight: 600;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #0f172a;
+      }
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__hamburger {
+    display: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 18px;
+
+    span {
+      display: block;
+      background-color: #0f172a;
+      width: 100%;
+      height: 2px;
+
+      &:not(:last-child) {
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  &__mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #dddddd;
+    display: flex;
+    flex-direction: column;
+    padding: {
+      left: 24px;
+      bottom: 24px;
+    }
+
+    a {
+      position: relative;
+      width: fit-content;
+      padding: {
+        top: 12px;
+      }
+      text-decoration: none;
+      color: #0f172a;
+      margin-bottom: 12px;
+
+      &.active {
+        color: #0f172a;
+        font-weight: 600;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: #0f172a;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 16px 20px;
+
+    &__nav {
+      display: none;
+    }
+
+    &__hamburger {
+      display: block;
+    }
+  }
+}

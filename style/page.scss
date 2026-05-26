@@ -1,0 +1,19 @@
+.msme {
+  &__main {
+    padding: 20px;
+
+    &-title-wrapper {
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-size: 48px;
+      line-height: 1.25;
+    }
+
+    p {
+      font-size: 16px;
+      color: #64748b;
+    }
+  }
+}
