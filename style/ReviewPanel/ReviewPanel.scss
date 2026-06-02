@@ -1,0 +1,254 @@
+.review-panel__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 100;
+}
+
+.review-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: calc((100% / 2) + 100px);
+  background: #ffffff;
+  z-index: 101;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
+
+  &.closing {
+    animation: slideOut 0.25s ease forwards;
+  }
+
+  &.open {
+    animation: slideIn 0.25s ease;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid #dddddd;
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 24px;
+
+      svg {
+        width: 32px;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    padding: 24px;
+    border-bottom: 1px solid #dddddd;
+
+    button {
+      height: 44px;
+      padding: 0 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .primary {
+      border: none;
+      background: #0f172a;
+      color: white;
+    }
+
+    .secondary {
+      border: 1px solid #cbd5e1;
+      background: white;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  &__document {
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  &__document-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #dddddd;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #64748b;
+
+    > p {
+      margin-bottom: 0;
+    }
+  }
+
+  &__document-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    button {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      background-color: transparent;
+      border: none medium transparent;
+    }
+  }
+
+  &__document-preview {
+    position: relative;
+    height: 700px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #f8fafc;
+    overflow-y: scroll;
+
+    > p {
+      align-self: center;
+    }
+  }
+
+  &__findings {
+    border: 1px solid #dddddd;
+    border-radius: 12px;
+    padding: 20px;
+    height: fit-content;
+  }
+
+  &__findings-header {
+    margin-bottom: 20px;
+
+    span {
+      color: #dc2626;
+      font-size: 12px;
+      font-weight: 700;
+    }
+  }
+
+  &__finding-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__finding {
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    &.error {
+      border-color: #fecaca;
+      background: #fef2f2;
+    }
+
+    &.success {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+    }
+  }
+
+  &__red-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #dc2626;
+    border-radius: 50%;
+  }
+
+  &__green-circle {
+    width: 20px;
+    height: 20px;
+    background-color: #14ef10;
+    border-radius: 50%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .review-panel {
+    width: 100%;
+
+    &__header {
+      h2 {
+        font-size: 24px;
+      }
+    }
+
+    &__content {
+      grid-template-columns: 1fr;
+    }
+
+    &__actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+
+    &__document-preview {
+      height: 400px;
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}

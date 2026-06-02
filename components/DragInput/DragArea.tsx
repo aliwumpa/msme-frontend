@@ -27,7 +27,13 @@ const DragArea = ({ selectedFileName }: DragAreaProps) => {
         />
       </div>
       <div className="drag-area__description">
-        <p>Allowed file format: {getAllowedContent(allowedContent)}</p>
+        <p className="drag-area__description-title">
+          Upload Invoice for Verification
+        </p>
+        <p>
+          Click or drag and drop your {getAllowedContent(allowedContent)}{" "}
+          invoice files here
+        </p>
       </div>
       {selectedFileName && (
         <p className="drag-area__file-name">{selectedFileName}</p>

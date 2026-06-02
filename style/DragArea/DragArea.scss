@@ -21,5 +21,18 @@
 
   &__description {
     margin-top: 20px;
+
+    &-title {
+      color: #000000;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    p {
+      &:last-child {
+        font-size: 14px;
+      }
+    }
   }
 }

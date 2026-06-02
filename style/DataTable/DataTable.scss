@@ -1,0 +1,142 @@
+.data-table {
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  margin-top: 20px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #dddddd;
+  }
+
+  &__title {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  &__view-all {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+
+    span {
+      &:nth-child(1) {
+        margin-right: 4px;
+      }
+
+      &:nth-child(2) {
+        vertical-align: top;
+      }
+    }
+  }
+
+  &__wrapper {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      padding: 18px 24px;
+      text-align: left;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #64748b;
+      text-transform: uppercase;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    td {
+      padding: 18px 24px;
+      border-bottom: 1px solid #eeeeee;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    tbody > tr {
+      cursor: pointer;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  &__invoice {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    strong {
+      font-size: 14px;
+    }
+
+    span {
+      font-size: 12px;
+      color: #64748b;
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+
+    &.verified {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    &.flagged {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    &.processing {
+      background: #e2e8f0;
+      color: #475569;
+    }
+  }
+
+  &__flag-count {
+    &.verified {
+      color: #0f172a;
+    }
+
+    &.flagged {
+      color: #dc2626;
+    }
+  }
+
+  &__icon-arrow-right {
+    width: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .data-table {
+    &__header {
+      padding: 16px;
+    }
+
+    &__title {
+      font-size: 20px;
+    }
+
+    &__table {
+      min-width: 900px;
+    }
+  }
+}

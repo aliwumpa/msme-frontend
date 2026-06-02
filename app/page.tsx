@@ -1,7 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import Header from "@/components/Header/Header";
 import UploadBox from "@/components/UploadBox";
+import DataTable from "@/components/DataTable/DataTable";
+import ReviewPanel from "@/components/ReviewPanel";
 
 export default function Home() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   return (
     <div className="msme__outer-wrapper">
       <Header />
@@ -10,7 +19,20 @@ export default function Home() {
           <h1>Invoice Verification</h1>
           <p>Precision processing for secure financial operations.</p>
         </div>
-        <UploadBox />
+        <UploadBox
+          selectedFile={selectedFile}
+          setSelectedFile={setSelectedFile}
+        />
+        <DataTable
+          setIsDrawerOpen={setIsDrawerOpen}
+          setSelectedInvoice={setSelectedInvoice}
+        />
+        <ReviewPanel
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
+          selectedFile={selectedFile}
+          selectedInvoice={selectedInvoice}
+        />
       </main>
     </div>
   );

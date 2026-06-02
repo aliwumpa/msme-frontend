@@ -3,14 +3,18 @@
 import { useRef, useState } from "react";
 import DragArea from "./DragInput/DragArea";
 
-const UploadBox = () => {
+type UploadBoxProps = {
+  selectedFile: File | null;
+  setSelectedFile: (value: File | null) => void;
+};
+
+const UploadBox = ({ selectedFile, setSelectedFile }: UploadBoxProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const allowedContentTypes = ".pdf,.png,.jpg,.jpeg";
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const preventDefaultBehavior = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
