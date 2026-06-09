@@ -7,6 +7,8 @@ type DragAreaProps = {
 };
 
 const DragArea = ({ selectedFileName }: DragAreaProps) => {
+  const basePath =
+    process.env.NODE_ENV === "production" ? "/msme-frontend" : "";
   const allowedContent = ["PDF", "PNG", "JPG", "JPEG"];
 
   const getAllowedContent = (allowedContent: string[]) => {
@@ -19,7 +21,7 @@ const DragArea = ({ selectedFileName }: DragAreaProps) => {
     <div className="drag-area__wrapper">
       <div className="drag-area__image-wrapper">
         <Image
-          src={`/upload-file.svg`}
+          src={`${basePath}/upload-file.svg`}
           alt="upload file logo"
           width={60}
           height={60}

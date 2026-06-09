@@ -7,13 +7,15 @@
     "build": "next build",
     "start": "next start",
     "deploy": "gh-pages -d out --dotfiles",
-    "lint": "eslint"
+    "lint": "eslint",
+    "compdoc": "node scripts/create-doc.js"
   },
   "dependencies": {
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "sass": "^1.100.0"
+    "sass": "^1.100.0",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

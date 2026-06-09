@@ -126,7 +126,7 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
       <div className="data-table__header">
         <h2 className="data-table__title">Recent Submissions</h2>
 
-        <button className="data-table__view-all">
+        {/* <button className="data-table__view-all">
           <span>View All</span>
           <span>
             {" "}
@@ -145,7 +145,7 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
               />
             </svg>
           </span>
-        </button>
+        </button> */}
       </div>
 
       <div className="data-table__wrapper">

@@ -1,7 +1,17 @@
 @use "./Header/header.scss";
 
+// CONTENT COMPONENTS
+
+// * DROPDOWN *
+@use "./Dropdown/Dropdown.scss";
+
+// * UPLOAD FILE *
 @use "./UploadBox/UploadBox.scss";
-@use "./DragArea/DragArea.scss";
 @use "./DragHover/DragHover.scss";
+@use "./DragArea/DragArea.scss";
+
+// * TABLE *
 @use "./DataTable/DataTable.scss";
+
+// * REVIEW PANEL *
 @use "./ReviewPanel/ReviewPanel.scss";

@@ -9,7 +9,6 @@ import ReviewPanel from "@/components/ReviewPanel";
 export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   return (
     <div className="msme__outer-wrapper">
@@ -19,10 +18,7 @@ export default function Home() {
           <h1>Invoice Verification</h1>
           <p>Precision processing for secure financial operations.</p>
         </div>
-        <UploadBox
-          selectedFile={selectedFile}
-          setSelectedFile={setSelectedFile}
-        />
+        <UploadBox />
         <DataTable
           setIsDrawerOpen={setIsDrawerOpen}
           setSelectedInvoice={setSelectedInvoice}
@@ -30,7 +26,6 @@ export default function Home() {
         <ReviewPanel
           isDrawerOpen={isDrawerOpen}
           setIsDrawerOpen={setIsDrawerOpen}
-          selectedFile={selectedFile}
           selectedInvoice={selectedInvoice}
         />
       </main>

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, Dispatch, SetStateAction, useState } from "react";
+import { useMSMEStore } from "@/store/useStore";
 
 type ReviewPanelProps = {
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
-  selectedFile: File | null;
   selectedInvoice: String | null;
 };
 
@@ -30,10 +30,10 @@ const findings = [
 const ReviewPanel = ({
   isDrawerOpen,
   setIsDrawerOpen,
-  selectedFile,
   selectedInvoice,
 }: ReviewPanelProps) => {
   const headerPanel = "original document";
+  const selectedFile = useMSMEStore((state) => state.selectedFile);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
   const isImage = selectedFile && selectedFile.type.startsWith("image/");
