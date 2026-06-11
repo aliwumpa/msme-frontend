@@ -1,3 +1,4 @@
+@use "../animation.scss" as *;
 @use "../color.scss" as *;
 
 .upload-box {
@@ -5,6 +6,11 @@
     border: 1px solid #dddddd;
     border-radius: 16px;
     padding: 20px;
+
+    .icon-loader {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   &__request-form-wrapper {
@@ -54,5 +60,14 @@
     background-color: #ffffff;
     border-radius: 8px;
     font-size: 14px;
+  }
+
+  &__result-wrapper {
+    display: flex;
+    margin-top: 16px;
+
+    img {
+      margin-right: 5px;
+    }
   }
 }

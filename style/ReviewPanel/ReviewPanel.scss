@@ -19,11 +19,11 @@
   box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
 
   &.closing {
-    animation: slideOut 0.25s ease forwards;
+    animation: slideOut 0.5s ease forwards;
   }
 
   &.open {
-    animation: slideIn 0.25s ease;
+    animation: slideIn 0.5s ease;
   }
 
   &__header {
@@ -166,7 +166,6 @@
     padding: 14px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 
     div {
       display: flex;

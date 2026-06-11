@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
+import { useMSMEStore } from "@/store/useStore";
+import { Dispatch, SetStateAction, useMemo } from "react";
 
 type DataTableProps = {
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
@@ -30,10 +31,10 @@ const dataInvoice = [
 
 const getStatusClassName = (status: string) => {
   switch (status) {
-    case "VERIFIED":
+    case "validated":
       return "verified";
 
-    case "FLAGGED":
+    case "flagged":
       return "flagged";
 
     case "PROCESSING":
@@ -45,6 +46,8 @@ const getStatusClassName = (status: string) => {
 };
 
 const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
+  const isTableLoading = useMSMEStore((state) => state.isTableLoading);
+  const invoicesList = useMSMEStore((state) => state.invoicesList);
   const tableHeader = [
     "Invoice ID",
     "Vendor",
@@ -53,6 +56,64 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
     "Status",
     "Flagged Items",
   ];
+
+  const tableRows = useMemo(() => {
+    return invoicesList.map((item) => (
+      <tr
+        key={item.id}
+        onClick={() => {
+          setIsDrawerOpen(true);
+          setSelectedInvoice(item.id);
+        }}
+      >
+        <td>
+          <div className="data-table__invoice">
+            <strong>{item.invoiceNumber}</strong>
+            {/* <p>
+                  <span>{`${item.fileType} ${item.fileSize}`}</span>
+                </p> */}
+          </div>
+        </td>
+
+        <td>{item.vendorName}</td>
+
+        <td>
+          {" "}
+          {new Date(item.createdAt).toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </td>
+
+        <td>
+          <strong>{item.total}</strong>
+        </td>
+
+        <td>
+          <div
+            className={`data-table__status ${getStatusClassName(
+              item.validationStatus,
+            )}`}
+          >
+            {getStatusClassName(item.validationStatus)}
+          </div>
+        </td>
+
+        <td>
+          <div className="data-table__flag-items">
+            <span
+              className={`data-table__flag-count ${getStatusClassName(
+                item.validationStatus,
+              )}`}
+            >
+              {item.flaggedItems}
+            </span>
+          </div>
+        </td>
+      </tr>
+    ));
+  }, [invoicesList]);
 
   const renderTableHeader = () => {
     return (
@@ -69,7 +130,7 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
   const renderTableBody = () => {
     return (
       <tbody>
-        {dataInvoice.map((item) => (
+        {/* {dataInvoice.map((item) => (
           <tr
             key={item.invoiceId}
             onClick={() => {
@@ -116,17 +177,29 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
               </div>
             </td>
           </tr>
-        ))}
+        ))} */}
+        {tableRows}
       </tbody>
     );
   };
 
-  return (
-    <div className="data-table">
-      <div className="data-table__header">
-        <h2 className="data-table__title">Recent Submissions</h2>
+  const renderTable = () => {
+    if (
+      !Array.isArray(invoicesList) ||
+      (invoicesList.length == 0 && !isTableLoading)
+    )
+      return;
 
-        {/* <button className="data-table__view-all">
+    if (isTableLoading) {
+      return <span className="icon-loader"></span>;
+    }
+
+    return (
+      <>
+        <div className="data-table__header">
+          <h2 className="data-table__title">Recent Submissions</h2>
+
+          {/* <button className="data-table__view-all">
           <span>View All</span>
           <span>
             {" "}
@@ -146,14 +219,23 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
             </svg>
           </span>
         </button> */}
-      </div>
+        </div>
 
-      <div className="data-table__wrapper">
-        <table className="data-table__table">
-          {renderTableHeader()}
-          {renderTableBody()}
-        </table>
-      </div>
+        <div className="data-table__wrapper">
+          <table className="data-table__table">
+            {renderTableHeader()}
+            {renderTableBody()}
+          </table>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div
+      className={`data-table${isTableLoading ? " data-table__loading" : ""}`}
+    >
+      {renderTable()}
     </div>
   );
 };

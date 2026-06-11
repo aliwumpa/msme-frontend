@@ -25,6 +25,19 @@
     gap: 24px;
   }
 
+  &__profile {
+    span {
+      &:nth-child(1) {
+        font-weight: 700;
+        margin-right: 8px;
+      }
+
+      &:last-child {
+        cursor: pointer;
+      }
+    }
+  }
+
   &__nav-link {
     position: relative;
     font-size: 14px;
@@ -129,6 +142,12 @@
 
     &__hamburger {
       display: block;
+    }
+
+    &__profile {
+      &-desktop {
+        display: none;
+      }
     }
   }
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, Dispatch, SetStateAction, useState } from "react";
-import { useMSMEStore } from "@/store/useStore";
+import { useLoginStore, useMSMEStore } from "@/store/useStore";
+import { getSubmissionDetail } from "@/services/submissionDetail";
 
 type ReviewPanelProps = {
   isDrawerOpen: boolean;
@@ -34,25 +35,67 @@ const ReviewPanel = ({
 }: ReviewPanelProps) => {
   const headerPanel = "original document";
   const selectedFile = useMSMEStore((state) => state.selectedFile);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
-  const isImage = selectedFile && selectedFile.type.startsWith("image/");
+  // const isImage = selectedFile && selectedFile.type.startsWith("image/");
   const [zoom, setZoom] = useState(50);
+  const [invoiceDetail, setInvoiceDetail] = useState<any>(null);
+  const [isLoadingDetail, setIsLoadingDetail] = useState(false);
+  const [detailError, setDetailError] = useState("");
+  const role = useLoginStore((state) => state.role);
+  const documentUrl = invoiceDetail?.document_url
+    ? `${process.env.NEXT_PUBLIC_API_URL}${invoiceDetail.document_url}`
+    : null;
+  const isDocImage = documentUrl && /\.(jpg|jpeg|png)$/i.test(documentUrl);
+
+  const getFindingStatus = (passed: boolean) => {
+    return passed ? "success" : "error";
+  };
+
+  const errorCount =
+    invoiceDetail?.validation_results?.filter((item: any) => !item.passed)
+      .length ?? 0;
 
   useEffect(() => {
-    if (!selectedFile) {
-      setPreviewUrl(null);
-      return;
-    }
+    const fetchInvoiceDetail = async () => {
+      if (!selectedInvoice) return;
 
-    const objectUrl = URL.createObjectURL(selectedFile);
+      try {
+        setIsLoadingDetail(true);
+        setDetailError("");
 
-    setPreviewUrl(objectUrl);
+        const result = await getSubmissionDetail(selectedInvoice.toString());
 
-    return () => {
-      URL.revokeObjectURL(objectUrl);
+        console.log(result, "invoice detail");
+
+        setInvoiceDetail(result.data);
+      } catch (error) {
+        console.error(error);
+        setDetailError("Failed to load invoice details");
+      } finally {
+        setIsLoadingDetail(false);
+      }
     };
-  }, [selectedFile]);
+
+    if (isDrawerOpen) {
+      fetchInvoiceDetail();
+    }
+  }, [isDrawerOpen, selectedInvoice]);
+
+  // useEffect(() => {
+  //   if (!selectedFile) {
+  //     setPreviewUrl(null);
+  //     return;
+  //   }
+
+  //   const objectUrl = URL.createObjectURL(selectedFile);
+
+  //   setPreviewUrl(objectUrl);
+
+  //   return () => {
+  //     URL.revokeObjectURL(objectUrl);
+  //   };
+  // }, [selectedFile]);
 
   if (!isDrawerOpen) return null;
 
@@ -66,7 +109,7 @@ const ReviewPanel = ({
   };
 
   const renderDocumentPreviewController = () => {
-    if (!isImage) return null;
+    if (!isDocImage) return null;
 
     return (
       <div className="review-panel__document-actions">
@@ -106,12 +149,12 @@ const ReviewPanel = ({
   };
 
   const renderPreviewSelectedFile = () => {
-    if (!previewUrl) return <p>No document selected</p>;
+    if (!documentUrl) return <p>No document selected</p>;
 
-    if (isImage)
+    if (isDocImage)
       return (
         <img
-          src={previewUrl!}
+          src={documentUrl!}
           alt="Preview"
           style={{
             transform: `scale(${zoom / 100})`,
@@ -121,7 +164,7 @@ const ReviewPanel = ({
 
     return (
       <iframe
-        src={`${previewUrl}#zoom=${zoom}`}
+        src={`${documentUrl}#zoom=${zoom}`}
         width="100%"
         height="100%"
         title="Document Preview"
@@ -144,6 +187,34 @@ const ReviewPanel = ({
     );
   };
 
+  const renderReviewActionPanel = () => {
+    if (role !== "admin") return;
+
+    return (
+      <div className="review-panel__actions">
+        <button className="secondary">Flag for Review</button>
+        <button className="primary">Approve Submission</button>
+      </div>
+    );
+  };
+
+  // const renderReviewPanel = () => {
+  //   if (isLoadingDetail) {
+  //     return (
+  //       <>
+  //         <div className="review-panel__overlay" onClick={handleClose}></div>
+
+  //         <aside className="review-panel open">
+  //           <div className="review-panel__loading">
+  //             <span className="icon-loader"></span>
+  //             <p>Loading invoice details...</p>
+  //           </div>
+  //         </aside>
+  //       </>
+  //     );
+  //   }
+  // };
+
   return (
     <>
       {/* Overlay */}
@@ -154,7 +225,12 @@ const ReviewPanel = ({
         <div className="review-panel__header">
           <div>
             <h2>Submission Details</h2>
-            <p>ID: {selectedInvoice} ・ Received Oct 24, 2023</p>
+            <p>
+              ID: {invoiceDetail?.invoice_number ?? "-"} ・ Received{" "}
+              {invoiceDetail?.created_at
+                ? new Date(invoiceDetail.created_at).toLocaleDateString("id-ID")
+                : "-"}
+            </p>
           </div>
           <button onClick={handleClose}>
             <svg
@@ -173,38 +249,39 @@ const ReviewPanel = ({
           </button>
         </div>
 
-        <div className="review-panel__actions">
-          <button className="secondary">Flag for Review</button>
-          <button className="primary">Approve Submission</button>
-        </div>
+        {renderReviewActionPanel()}
 
         <div className="review-panel__content">
           {renderDocumentPreview()}
           <div className="review-panel__findings">
             <div className="review-panel__findings-header">
               <h3>Prompt Checker Results</h3>
-              <span>1 ERROR</span>
+              <span>{errorCount} ERROR</span>
             </div>
 
             <div className="review-panel__finding-list">
-              {findings.map((item) => (
-                <div
-                  key={item.label}
-                  className={`review-panel__finding ${item.status || "-"}`}
-                >
-                  <div>
-                    <span
-                      className={
-                        item.status === "error"
-                          ? "review-panel__red-circle"
-                          : "review-panel__green-circle"
-                      }
-                    ></span>
-                    <span>{item.label || "-"}</span>
+              {invoiceDetail?.validation_results?.map(
+                (item: any, idx: number) => (
+                  <div
+                    key={`key-${idx}`}
+                    className={`review-panel__finding ${getFindingStatus(item.passed)}`}
+                  >
+                    <div>
+                      <span
+                        className={
+                          item.passed
+                            ? "review-panel__green-circle"
+                            : "review-panel__red-circle"
+                        }
+                      ></span>
+
+                      <span>{item.rule_name}</span>
+                    </div>
+
+                    <p>{item.message}</p>
                   </div>
-                  <p>{item.detail || "-"}</p>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           </div>
         </div>

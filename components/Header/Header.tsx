@@ -1,13 +1,18 @@
 "use client";
 
+import { useLoginStore } from "@/store/useStore";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const Header = () => {
-  const pathname = usePathname();
+type HeaderProps = {
+  setIsLeaving?: (value: boolean) => void;
+};
 
+const Header = ({ setIsLeaving }: HeaderProps) => {
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const role = useLoginStore((state) => state.role);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -16,12 +21,16 @@ const Header = () => {
   const menuItems = [
     {
       label: "Dashboard",
-      path: "/",
+      path: "/dashboard",
     },
   ];
 
   const getActiveClass = (path: string) => {
     return pathname === path ? "active" : "";
+  };
+
+  const handleSignOut = () => {
+    setIsLeaving?.(true);
   };
 
   return (
@@ -43,6 +52,14 @@ const Header = () => {
       </div>
 
       <div className="header__right">
+        <div className="header__profile header__profile-desktop">
+          <span>
+            Login as {role ? role.charAt(0).toUpperCase() + role.slice(1) : "-"}
+          </span>
+          <span className="header__sign-out" onClick={handleSignOut}>
+            Sign out
+          </span>
+        </div>
         <button className="header__hamburger" onClick={toggleMobileMenu}>
           {[...Array(3)].map((_, idx) => (
             <span key={idx}></span>
@@ -52,6 +69,12 @@ const Header = () => {
 
       {isMobileMenuOpen && (
         <div className="header__mobile-menu">
+          <div className="header__profile">
+            <span>Login as {role.charAt(0).toUpperCase() + role.slice(1)}</span>
+            <span className="header__sign-out" onClick={handleSignOut}>
+              Sign out
+            </span>
+          </div>
           {menuItems.map((item) => (
             <Link
               key={item.path}
