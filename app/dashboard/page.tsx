@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header/Header";
 import UploadBox from "@/components/UploadBox";
 import DataTable from "@/components/DataTable/DataTable";
 import ReviewPanel from "@/components/ReviewPanel";
-import { useLoginStore } from "@/store/useStore";
+import { useLoginStore, useMSMEStore } from "@/store/useStore";
 import { useRouter } from "next/navigation";
+import { getSubmissionList } from "@/services/submissionList";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -14,6 +15,39 @@ const Dashboard = () => {
   const [selectedInvoice, setSelectedInvoice] = useState<string | null>(null);
   const [isLeaving, setIsLeaving] = useState(false);
   const logout = useLoginStore((state) => state.logout);
+
+  const setIsTableLoading = useMSMEStore((state) => state.setIsTableLoading);
+
+  const setInvoicesList = useMSMEStore((state) => state.setInvoicesList);
+
+  useEffect(() => {
+    const loadInvoices = async () => {
+      try {
+        setIsTableLoading(true);
+
+        const response = await getSubmissionList();
+
+        const mappedInvoices = response.data.map((item: any) => ({
+          id: item.id,
+          invoiceNumber: item.invoice_number,
+          vendorName: item.vendor_name,
+          total: item.total,
+          currency: item.currency,
+          validationStatus: item.validation_status,
+          flaggedItems: item.flagged_items,
+          createdAt: item.created_at,
+        }));
+
+        setInvoicesList(mappedInvoices);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsTableLoading(false);
+      }
+    };
+
+    loadInvoices();
+  }, [setInvoicesList, setIsTableLoading]);
 
   return (
     <div
