@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, Dispatch, SetStateAction, useState } from "react";
-import { useLoginStore, useMSMEStore } from "@/store/useStore";
+import { useLoginStore } from "@/store/useStore";
 import { getSubmissionDetail } from "@/services/submissionDetail";
 
 type ReviewPanelProps = {
@@ -10,34 +10,13 @@ type ReviewPanelProps = {
   selectedInvoice: String | null;
 };
 
-const findings = [
-  {
-    label: "Missing Tax ID",
-    status: "error",
-    detail: "Required",
-  },
-  {
-    label: "Date Verified",
-    status: "success",
-    detail: "Within Period",
-  },
-  {
-    label: "Supplier Match",
-    status: "success",
-    detail: "A-1 Master Data",
-  },
-];
-
 const ReviewPanel = ({
   isDrawerOpen,
   setIsDrawerOpen,
   selectedInvoice,
 }: ReviewPanelProps) => {
   const headerPanel = "original document";
-  const selectedFile = useMSMEStore((state) => state.selectedFile);
-  // const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
-  // const isImage = selectedFile && selectedFile.type.startsWith("image/");
   const [zoom, setZoom] = useState(50);
   const [invoiceDetail, setInvoiceDetail] = useState<any>(null);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
@@ -81,21 +60,6 @@ const ReviewPanel = ({
       fetchInvoiceDetail();
     }
   }, [isDrawerOpen, selectedInvoice]);
-
-  // useEffect(() => {
-  //   if (!selectedFile) {
-  //     setPreviewUrl(null);
-  //     return;
-  //   }
-
-  //   const objectUrl = URL.createObjectURL(selectedFile);
-
-  //   setPreviewUrl(objectUrl);
-
-  //   return () => {
-  //     URL.revokeObjectURL(objectUrl);
-  //   };
-  // }, [selectedFile]);
 
   if (!isDrawerOpen) return null;
 

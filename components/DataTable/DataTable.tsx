@@ -6,29 +6,6 @@ type DataTableProps = {
   setSelectedInvoice: Dispatch<SetStateAction<string | null>>;
 };
 
-const dataInvoice = [
-  {
-    invoiceId: "#INV-2024-089",
-    fileType: "PDF",
-    fileSize: "2.4 MB",
-    vendor: "Global Logistics Inc.",
-    date: "Oct 24, 2023",
-    amount: "$12,450.00",
-    status: "VERIFIED",
-    flagCount: 0,
-  },
-  {
-    invoiceId: "#INV-2024-090",
-    fileType: "XML",
-    fileSize: "156 KB",
-    vendor: "Stark Industries",
-    date: "Oct 23, 2023",
-    amount: "$84,200.50",
-    status: "FLAGGED",
-    flagCount: 2,
-  },
-];
-
 const getStatusClassName = (status: string) => {
   switch (status) {
     case "validated":
@@ -127,68 +104,25 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
     );
   };
 
-  const renderTableBody = () => {
-    return (
-      <tbody>
-        {/* {dataInvoice.map((item) => (
-          <tr
-            key={item.invoiceId}
-            onClick={() => {
-              setIsDrawerOpen(true);
-              setSelectedInvoice(item.invoiceId);
-            }}
-          >
-            <td>
-              <div className="data-table__invoice">
-                <strong>{item.invoiceId}</strong>
-                <p>
-                  <span>{`${item.fileType} ${item.fileSize}`}</span>
-                </p>
-              </div>
-            </td>
-
-            <td>{item.vendor}</td>
-
-            <td>{item.date}</td>
-
-            <td>
-              <strong>{item.amount}</strong>
-            </td>
-
-            <td>
-              <div
-                className={`data-table__status ${getStatusClassName(
-                  item.status,
-                )}`}
-              >
-                {item.status}
-              </div>
-            </td>
-
-            <td>
-              <div className="data-table__flag-items">
-                <span
-                  className={`data-table__flag-count ${getStatusClassName(
-                    item.status,
-                  )}`}
-                >
-                  {item.flagCount}
-                </span>
-              </div>
-            </td>
-          </tr>
-        ))} */}
-        {tableRows}
-      </tbody>
-    );
-  };
-
   const renderTable = () => {
     if (
       !Array.isArray(invoicesList) ||
       (invoicesList.length == 0 && !isTableLoading)
-    )
-      return;
+    ) {
+      return (
+        <div className="data-table__wrapper data-table__wrapper-empty">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 0 1 3.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0 1 21 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 0 1 7.5 16.125V3.375Z" />
+            <path d="M15 5.25a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 17.25 7.5h-1.875A.375.375 0 0 1 15 7.125V5.25ZM4.875 6H6v10.125A3.375 3.375 0 0 0 9.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V7.875C3 6.839 3.84 6 4.875 6Z" />
+          </svg>
+          <p>There is no submitted Invoices</p>
+        </div>
+      );
+    }
 
     if (isTableLoading) {
       return <span className="icon-loader"></span>;
@@ -224,7 +158,7 @@ const DataTable = ({ setIsDrawerOpen, setSelectedInvoice }: DataTableProps) => {
         <div className="data-table__wrapper">
           <table className="data-table__table">
             {renderTableHeader()}
-            {renderTableBody()}
+            <tbody>{tableRows}</tbody>
           </table>
         </div>
       </>

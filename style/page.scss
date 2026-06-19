@@ -34,6 +34,13 @@
     border: 1px solid #d9d9d9;
     border-radius: 8px;
     width: 100%;
+    background:
+      radial-gradient(
+        circle at top left,
+        rgba(139, 92, 246, 0.12),
+        transparent 35%
+      ),
+      linear-gradient(135deg, #f8fafc, #ffffff);
     @include animationSlideFadeIn();
 
     h1 {

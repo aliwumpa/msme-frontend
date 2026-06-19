@@ -48,7 +48,7 @@ export default function LoginPage() {
           }
         }}
       >
-        <h1>Sign in</h1>
+        <h1>MSME Compliance</h1>
         <form className="msme__login-form" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="usernameInput">Username</label>
